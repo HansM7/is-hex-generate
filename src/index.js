@@ -40,8 +40,9 @@ function generateHexagonalModule(moduleName) {
       utils: [`${moduleName}.util.ts`],
     },
     test: [`${moduleName}.spec.ts`],
-    rootFiles: [`${moduleName}.module.ts`, `${moduleName}.provider.ts`],
   };
+
+  const rootFiles = [`${moduleName}.module.ts`, `${moduleName}.provider.ts`];
 
   const createStructure = (baseDir, struct) => {
     Object.keys(struct).forEach((key) => {
@@ -50,7 +51,16 @@ function generateHexagonalModule(moduleName) {
         fs.mkdirSync(currentPath, { recursive: true });
         struct[key].forEach((file) => {
           const filePath = path.join(currentPath, file);
-          fs.writeFileSync(filePath, `// ${file}`, "utf8");
+          if (!fs.existsSync(filePath)) {
+            let content = `// ${file}`;
+            if (file.endsWith(".service.ts")) {
+              const className = file
+                .replace(/(-\w)/g, (match) => match[1].toUpperCase())
+                .replace(".service.ts", "Service");
+              content = `export class ${className} {}`;
+            }
+            fs.writeFileSync(filePath, content, "utf8");
+          }
         });
       } else if (typeof struct[key] === "object") {
         fs.mkdirSync(currentPath, { recursive: true });
@@ -59,14 +69,32 @@ function generateHexagonalModule(moduleName) {
     });
   };
 
+  const createRootFiles = (baseDir, files) => {
+    files.forEach((file) => {
+      const filePath = path.join(baseDir, file);
+      if (!fs.existsSync(filePath)) {
+        const className = file
+          .replace(/(-\w)/g, (match) => match[1].toUpperCase())
+          .replace(".ts", "")
+          .replace(/\./g, "")
+          .replace(
+            moduleName,
+            moduleName[0].toUpperCase() + moduleName.slice(1)
+          );
+        const content = file.endsWith(".module.ts")
+          ? `// Here is export & import control`
+          : file.endsWith(".provider.ts")
+          ? `// Here is export all providers`
+          : `// ${file}`;
+        fs.writeFileSync(filePath, content, "utf8");
+      }
+    });
+  };
+
   fs.mkdirSync(basePath, { recursive: true });
 
   createStructure(basePath, structure);
-
-  structure.rootFiles.forEach((file) => {
-    const filePath = path.join(basePath, file);
-    fs.writeFileSync(filePath, `// ${file}`, "utf8");
-  });
+  createRootFiles(basePath, rootFiles);
 
   console.log(`Módulo ${moduleName} generado exitosamente en ${basePath}`);
 }
