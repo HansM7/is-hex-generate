@@ -1,12 +1,12 @@
 {
   "name": "is-hex-generate",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Herramienta CLI para generar módulos con arquitectura hexagonal.",
   "type": "module",
   "bin": {
     "is-hex-generate": "./src/index.js"
   },
   "keywords": ["hexagonal", "architecture", "cli", "nestjs"],
-  "author": "Tu Nombre",
+  "author": "Hans",
   "license": "MIT"
 }

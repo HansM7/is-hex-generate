@@ -21,7 +21,6 @@ function generateHexagonalModule(moduleName) {
           `${moduleName}-find-one.service.ts`,
         ],
         general: [
-          `${moduleName}-config.service.ts`,
           `${moduleName}.service.ts`,
         ],
       },
