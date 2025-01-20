@@ -56,7 +56,8 @@ function generateHexagonalModule(moduleName) {
               const className = file
                 .replace(/(-\w)/g, (match) => match[1].toUpperCase())
                 .replace(".service.ts", "Service");
-              content = `export class ${className} {}`;
+              const classNameCapitalized = className.charAt(0).toUpperCase() + className.slice(1);
+              content = `export class ${classNameCapitalized} {}`;
             }
             fs.writeFileSync(filePath, content, "utf8");
           }

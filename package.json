@@ -1,6 +1,6 @@
 {
   "name": "is-hex-generate",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Herramienta CLI para generar módulos con arquitectura hexagonal.",
   "type": "module",
   "bin": {
